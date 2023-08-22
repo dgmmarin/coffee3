@@ -5,7 +5,8 @@ import usePagination from '@/hooks/usePagination'
 
 export type PaginationProps = {
   totalItems: number
-  currentPage: number
+  currentPage: number 
+  isButton: boolean
   renderPageLink: (page: number, limit: number) => string
   itemsPerPage?: number
   setPage: (value: any) => void
@@ -16,6 +17,7 @@ export const dotts = '...'
 const Pagination = ({
   totalItems,
   currentPage,
+  isButton = false,
   itemsPerPage = 10,
   renderPageLink,
   setPage,
@@ -33,7 +35,14 @@ const Pagination = ({
             {pageNumber}
           </span>
         ) : (
-          
+          isButton == true ? <button key={i}
+          onClick={setPage}
+          className={`${
+            pageNumber === currentPage ? 'text-success-dark' : 'text-black'
+          } px-4 py-2 mx-1 rounded-full text-sm font-semibold no-underline`}
+        >
+          {pageNumber}
+        </button> : 
           <Link
             key={i}
             href={renderPageLink(pageNumber as number, itemsPerPage)}
@@ -43,6 +52,7 @@ const Pagination = ({
           >
             {pageNumber}
           </Link>
+          
         )
       )}
     </div>

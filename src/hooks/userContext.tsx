@@ -11,11 +11,14 @@ interface UserContextType {
     login: (userData: User) => void;
     logout: () => void;
     getUser: () => User | null;
+    signup: boolean;
+    setRegister: (signup:boolean) => boolean;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 export function UserProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
+    const [signup, setSignup] = useState(false);
 
     // Check local storage for a logged-in user on initial load
     useEffect(() => {
@@ -24,7 +27,10 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
             setUser(storedUser);
         }
     }, []);
-
+    const setRegister = (signup:boolean): boolean =>{
+        setSignup(signup);
+        return signup
+    } 
     const getUser = (): User => {
         const storedUser = JSON.parse(localStorage.getItem('user') || 'null');
         if (storedUser) {
@@ -44,7 +50,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     };
 
     return (
-        <UserContext.Provider value={{ user, login, logout, getUser }}>
+        <UserContext.Provider value={{ user, login, logout, getUser, signup, setRegister }}>
             {children}
         </UserContext.Provider>
     );
